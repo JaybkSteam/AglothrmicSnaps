@@ -29,3 +29,6 @@ nav {
     text-decoration: none;
     
     }
+    .navbar-light .navbar-nav .nav-link {
+        color: white;
+    }
