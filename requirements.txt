@@ -1,0 +1,4 @@
+flask
+pymsql
+flask-login
+gunicorn==21.20
