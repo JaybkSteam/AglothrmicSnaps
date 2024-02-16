@@ -62,7 +62,7 @@ def get_db():
 @app.teardown_appcontext
 def close_db(error):
     '''Closes the database connection at the end of request.'''    
-    if hasattr(g, 'db'):
+    if hasattr(g, 'db'): 
         g.db.close() 
 
 @app.route('/')
@@ -81,7 +81,7 @@ def signup():
 
         cursor =  get_db().cursor()
 
-        cursor.execute(f"INSERT INTO `users` (`Username`, `Passowrd`, `dob`, ) VALUES ('{dob}', '{username}', '{password}')")
+        cursor.execute(f"INSERT INTO `Users` (`Username`, `Password`, `dob` ) VALUES ('{username}', '{password}', '{dob}')")
         cursor.close()
         get_db().commit
         
@@ -104,7 +104,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         cursor = get_db().commit
-        cursor.execute(f"SELECT * FROM `users` WHERE username='{username}'")
+        cursor.execute(f"SELECT * FROM `Users` WHERE username='{username}'")
         result = cursor.fetchone()
         if result and result['password'] == password:
              user = load_user(result ['id'])
