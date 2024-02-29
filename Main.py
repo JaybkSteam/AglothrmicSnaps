@@ -91,11 +91,28 @@ def signup():
 
     return render_template('sign_up.html.jinja')
 
-@app.route('/feed')
+app.route('/feed', methods=['GET','POST'])
 @flask_login.login_required
 def feed():
-    return flask_login.current_user
-    return render_template('feed.html.jinja')
+    if flask_login.current_user.is_authenticated == False:
+        return redirect('/')
+    cursor = get_db().cursor()
+    cursor.execute("SELECT * FROM `posts` ORDER BY `timestamp`")
+    get_db().commit()
+    cursor.close()
+    posts_db = cursor.fetchall()
+    user_login = flask_login.current_user.username
+    if request.method == 'POST':
+        description = request.form['new_post']
+        user_id = flask_login.current_user.get_id()
+        cursor = get_db().cursor()
+        cursor.execute(f"INSERT INTO `posts` (`user_id`, `description`) VALUES ('{user_id}', '{description}')")
+        cursor.close()
+        get_db().commit()
+        return redirect('/feed')
+
+    return render_template('feed.html.jinja', posts_db = posts_db, user_login = user_login)
+
 
 
 @app.route('/signin')
